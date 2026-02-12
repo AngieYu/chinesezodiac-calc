@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chinese Zodiac Calculator | Lunar New Year</title>
+    <title>Chinese Zodiac Calculator | Lunar New Year 2026</title>
     <style>
-        /* 全局样式 - 新年红金配色+喜庆氛围 */
+        /* 全局样式 - 强化红金新年配色 */
         * {
             margin: 0;
             padding: 0;
@@ -13,11 +13,10 @@
             font-family: 'Arial Rounded MT Bold', 'Microsoft YaHei', sans-serif;
         }
 
-        /* 烟花背景动画 */
+        /* 背景层：红金渐变+烟花画布 */
         body {
-            background: linear-gradient(135deg, #8B0000, #FF4500, #FFD700);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: linear-gradient(120deg, #7c0000, #9e1a1a, #ffb81c);
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -27,146 +26,237 @@
             position: relative;
         }
 
-        /* 烟花粒子效果 */
-        body::before, body::after {
-            content: '';
+        /* 动态烟花画布 */
+        #fireworks-canvas {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffd700' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
-            opacity: 0.3;
-            animation: fireworkFloat 20s linear infinite;
+            pointer-events: none;
             z-index: 0;
         }
 
-        body::after {
-            animation-delay: 10s;
-            opacity: 0.2;
+        /* 鞭炮装饰 - 左侧垂直排列 */
+        .firecrackers {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            display: none; /* 移动端隐藏，避免遮挡 */
         }
 
-        /* 渐变背景动画 */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @media (min-width: 768px) {
+            .firecrackers {
+                display: block;
+            }
         }
 
-        /* 烟花漂浮动画 */
-        @keyframes fireworkFloat {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(20px, -20px) rotate(90deg); }
-            50% { transform: translate(0, -40px) rotate(180deg); }
-            75% { transform: translate(-20px, -20px) rotate(270deg); }
-            100% { transform: translate(0, 0) rotate(360deg); }
+        .firecracker {
+            width: 30px;
+            height: 80px;
+            background: linear-gradient(90deg, #7c0000, #ff3300);
+            border: 2px solid #ffb81c;
+            border-radius: 4px;
+            margin: 10px 0;
+            position: relative;
+            animation: firecrackerSwing 3s ease-in-out infinite;
         }
 
-        /* 主容器样式 */
+        .firecracker:nth-child(even) {
+            animation-delay: 1s;
+        }
+
+        .firecracker::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 15px;
+            background: #ffb81c;
+            border-radius: 2px;
+        }
+
+        .firecracker::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 8px;
+            background: #ff3300;
+            border-radius: 2px;
+            box-shadow: 0 0 5px #ff0000;
+        }
+
+        @keyframes firecrackerSwing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        /* 奔腾马驹装饰 - 右下角动态元素 */
+        .running-horse {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            width: 120px;
+            height: 80px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cpath fill='%23ffb81c' d='M180,80c-10,0-20-5-25-15c-5-10-15-20-30-20c-15,0-25,10-35,10c-10,0-20-5-25-15c-5-10-15-15-25-15c-10,0-20,5-25,15c-5,10-15,15-25,15c-10,0-20-5-25-15c-5-10-10-20-10-30c0-10,5-20,15-25c10-5,20-5,30,0c10,5,15,15,20,25c5,10,10,15,20,15c10,0,20-5,25-15c5-10,15-15,25-15c10,0,20,5,25,15c5,10,15,15,25,15c10,0,20-5,25-15c5-10,10-20,10-30c0-10,5-20,15-25c10-5,20-5,30,0c10,5,15,15,20,25c5,10,10,15,20,15c10,0,20-5,25-15c5-10,15-15,25-15c10,0,20,5,25,15c5,10,15,15,25,15z'/%3E%3C/svg%3E") no-repeat center;
+            background-size: contain;
+            animation: horseRun 8s linear infinite, horseGlow 3s ease-in-out infinite alternate;
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        @keyframes horseRun {
+            0% { right: -150px; }
+            100% { right: 100%; }
+        }
+
+        @keyframes horseGlow {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.3); }
+        }
+
+        /* 主容器 - 红金镶边+磨砂玻璃 */
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 50px rgba(255, 215, 0, 0.5);
-            max-width: 450px;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 45px 35px;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 60px rgba(255, 184, 28, 0.3);
+            max-width: 480px;
             width: 100%;
             text-align: center;
             position: relative;
-            z-index: 1;
-            border: 3px solid #FFD700;
+            z-index: 2;
+            border: 4px solid #ffb81c;
+            backdrop-filter: blur(8px);
         }
 
-        /* 标题样式 */
+        /* 标题 - 红金渐变文字+辉光 */
         h1 {
-            color: #8B0000;
-            margin-bottom: 25px;
-            font-size: 28px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(90deg, #7c0000, #ffb81c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 30px;
+            font-size: 32px;
+            text-shadow: 0 0 10px rgba(255, 184, 28, 0.4);
             position: relative;
-            animation: titleGlow 3s ease-in-out infinite alternate;
+            animation: titlePulse 4s ease-in-out infinite;
         }
 
-        @keyframes titleGlow {
-            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
-            to { text-shadow: 2px 2px 10px rgba(255, 215, 0, 0.8); }
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        /* 输入框样式 */
+        /* 输入框 - 红金边框+聚焦动画 */
         .input-group {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             position: relative;
         }
 
         input {
             width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #FFD700;
-            border-radius: 12px;
-            font-size: 18px;
+            padding: 18px 22px;
+            border: 3px solid #ffb81c;
+            border-radius: 15px;
+            font-size: 19px;
             outline: none;
-            background: rgba(255, 255, 255, 0.8);
-            transition: all 0.3s ease;
-            color: #8B0000;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.4s ease;
+            color: #7c0000;
         }
 
         input:focus {
-            border-color: #8B0000;
-            box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
+            border-color: #7c0000;
+            box-shadow: 0 0 20px rgba(124, 0, 0, 0.4);
             background: white;
+            transform: translateY(-2px);
         }
 
         input::placeholder {
-            color: #8B000080;
+            color: #7c000085;
+            font-size: 17px;
         }
 
-        /* 按钮样式 */
+        /* 按钮 - 红金渐变+hover爆炸效果 */
         button {
-            background: linear-gradient(135deg, #8B0000, #FF4500);
+            background: linear-gradient(135deg, #7c0000, #ff3300);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 18px;
+            padding: 18px 35px;
+            border-radius: 15px;
+            font-size: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             width: 100%;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
+            letter-spacing: 2px;
+            box-shadow: 0 8px 25px rgba(124, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 184, 28, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         button:hover {
-            background: linear-gradient(135deg, #A52A2A, #FF6347);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.5);
+            background: linear-gradient(135deg, #9e1a1a, #ff5500);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(124, 0, 0, 0.6);
         }
 
         button:active {
             transform: translateY(1px);
-            box-shadow: 0 3px 10px rgba(139, 0, 0, 0.3);
+            box-shadow: 0 6px 15px rgba(124, 0, 0, 0.4);
         }
 
-        /* 错误提示 */
+        /* 错误提示 - 红金抖动 */
         .error {
-            color: #8B0000;
-            margin-top: 10px;
+            color: #7c0000;
+            margin-top: 12px;
             display: none;
             font-weight: bold;
-            animation: shake 0.5s ease;
+            font-size: 17px;
+            animation: shake 0.6s ease;
+            text-shadow: 0 0 5px rgba(255, 184, 28, 0.3);
         }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
         }
 
-        /* 结果区域 */
+        /* 结果区域 - 淡入+上浮+红金装饰 */
         .result {
-            margin-top: 30px;
+            margin-top: 35px;
             display: none;
-            animation: fadeInUp 0.8s ease forwards;
+            animation: fadeInUp 1s ease forwards;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
         }
 
         @keyframes fadeInUp {
@@ -177,98 +267,276 @@
         }
 
         .result h2 {
-            color: #8B0000;
-            margin-bottom: 20px;
-            font-size: 24px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            color: #7c0000;
+            margin-bottom: 15px;
+            font-size: 26px;
+            text-shadow: 0 0 8px rgba(255, 184, 28, 0.4);
         }
 
-        /* 生肖图片样式 */
+        /* 新年运势文字 - 红金渐变+卡片样式 */
+        .fortune-text {
+            background: linear-gradient(135deg, rgba(124, 0, 0, 0.1), rgba(255, 184, 28, 0.1));
+            border: 2px solid #ffb81c;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-size: 18px;
+            color: #7c0000;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: fortuneGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes fortuneGlow {
+            from { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+            to { box-shadow: 0 5px 20px rgba(255, 184, 28, 0.5); }
+        }
+
+        /* 生肖图片 - 红金边框+hover旋转缩放 */
         .zodiac-img {
-            width: 220px;
-            height: 220px;
-            border-radius: 15px;
+            width: 240px;
+            height: 240px;
+            border-radius: 20px;
             object-fit: cover;
             margin: 0 auto;
             display: block;
-            border: 4px solid #FFD700;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.5s ease;
+            border: 5px solid #ffb81c;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.6s ease;
         }
 
         .zodiac-img:hover {
-            transform: scale(1.05) rotate(2deg);
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 15px 40px rgba(124, 0, 0, 0.5);
+            border-color: #7c0000;
         }
     </style>
 </head>
 <body>
+    <!-- 烟花画布 -->
+    <canvas id="fireworks-canvas"></canvas>
+    
+    <!-- 鞭炮装饰 -->
+    <div class="firecrackers">
+        <div class="firecracker"></div>
+        <div class="firecracker"></div>
+        <div class="firecracker"></div>
+        <div class="firecracker"></div>
+        <div class="firecracker"></div>
+    </div>
+
+    <!-- 奔腾马驹装饰 -->
+    <div class="running-horse"></div>
+
+    <!-- 主容器 -->
     <div class="container">
-        <h1>🐉 Chinese Zodiac Calculator</h1>
+        <h1>🐉 Chinese Zodiac & Fortune</h1>
         <div class="input-group">
             <input type="number" id="yearInput" placeholder="Enter your birth year (e.g., 1990)" min="1900" max="2100">
         </div>
-        <button onclick="calculateZodiac()">Check My Zodiac</button>
+        <button onclick="calculateZodiac()">Check My Zodiac & Fortune</button>
         <p class="error" id="errorTip">Please enter a valid year (1900-2100)</p>
         <div class="result" id="resultArea">
             <h2 id="zodiacText">Your Chinese Zodiac is: Rat</h2>
+            <!-- 新年运势 -->
+            <p class="fortune-text" id="fortuneText">Fortune: A year of prosperity and new opportunities!</p>
+            <!-- 生肖图片 -->
             <img id="zodiacImg" class="zodiac-img" src="" alt="Chinese Zodiac Image">
         </div>
     </div>
 
     <script>
-        // ====================== 替换这里的链接 ======================
-        // 把下面每个img的值替换成你的Raw链接
+        // ====================== 替换这里的链接和运势 ======================
         // Zodiac order: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig
         const zodiacs = [
-            { name: "Rat", img: "你的鼠生肖Raw链接" },
-            { name: "Ox", img: "你的牛生肖Raw链接" },
-            { name: "Tiger", img: "你的虎生肖Raw链接" },
-            { name: "Rabbit", img: "你的兔生肖Raw链接" },
-            { name: "Dragon", img: "你的龙生肖Raw链接" },
-            { name: "Snake", img: "你的蛇生肖Raw链接" },
-            { name: "Horse", img: "你的马生肖Raw链接" },
-            { name: "Goat", img: "你的羊生肖Raw链接" },
-            { name: "Monkey", img: "你的猴生肖Raw链接" },
-            { name: "Rooster", img: "你的鸡生肖Raw链接" },
-            { name: "Dog", img: "https://github.com/AngieYu/zodiac-calc/blob/8f3879e8b9e2d8fe63d21cd8f6627101bad2a07f/Dog.jpg" },
-            { name: "Pig", img: "你的猪生肖Raw链接" }
+            { 
+                name: "Rat", 
+                img: "你的鼠生肖Raw链接", 
+                fortune: "Fortune: A year of prosperity and new opportunities!" 
+            },
+            { 
+                name: "Ox", 
+                img: "你的牛生肖Raw链接", 
+                fortune: "Fortune: Hard work brings great rewards and stability!" 
+            },
+            { 
+                name: "Tiger", 
+                img: "你的虎生肖Raw链接", 
+                fortune: "Fortune: Courage leads to exciting new adventures ahead!" 
+            },
+            { 
+                name: "Rabbit", 
+                img: "你的兔生肖Raw链接", 
+                fortune: "Fortune: Peace and harmony fill your year with joy!" 
+            },
+            { 
+                name: "Dragon", 
+                img: "你的龙生肖Raw链接", 
+                fortune: "Fortune: Good luck and success shine on all your efforts!" 
+            },
+            { 
+                name: "Snake", 
+                img: "你的蛇生肖Raw链接", 
+                fortune: "Fortune: Wisdom guides you to unexpected blessings!" 
+            },
+            { 
+                name: "Horse", 
+                img: "你的马生肖Raw链接", 
+                fortune: "Fortune: Progress and freedom bring endless possibilities!" 
+            },
+            { 
+                name: "Goat", 
+                img: "你的羊生肖Raw链接", 
+                fortune: "Fortune: Kindness and calm bring abundant happiness!" 
+            },
+            { 
+                name: "Monkey", 
+                img: "你的猴生肖Raw链接", 
+                fortune: "Fortune: Creativity and fun make this year unforgettable!" 
+            },
+            { 
+                name: "Rooster", 
+                img: "你的鸡生肖Raw链接", 
+                fortune: "Fortune: Confidence and clarity lead to great achievements!" 
+            },
+            { 
+                name: "Dog", 
+                img: "你的狗生肖Raw链接", 
+                fortune: "Fortune: Loyalty and protection bring peace of mind!" 
+            },
+            { 
+                name: "Pig", 
+                img: "你的猪生肖Raw链接", 
+                fortune: "Fortune: Generosity and joy fill your life with abundance!" 
+            }
         ];
         // ====================== 替换结束 ======================
 
-        // Core calculation function
+        // 动态烟花效果核心代码
+        function initFireworks() {
+            const canvas = document.getElementById('fireworks-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            // 适配窗口大小
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // 粒子类
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.speed = Math.random() * 5 + 2;
+                    this.angle = Math.random() * Math.PI * 2;
+                    this.gravity = 0.05;
+                    this.vx = Math.cos(this.angle) * this.speed;
+                    this.vy = Math.sin(this.angle) * this.speed;
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.01 + 0.005;
+                    // 红金配色随机
+                    this.color = `rgb(${200 + Math.random() * 55}, ${Math.random() * 100}, ${Math.random() * 50})`;
+                    this.size = Math.random() * 4 + 2;
+                }
+
+                update() {
+                    // 重力影响
+                    this.vy += this.gravity;
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    // 渐隐
+                    this.alpha -= this.decay;
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            // 创建烟花
+            function createFirework() {
+                // 随机位置
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height * 0.8;
+                // 生成粒子
+                for (let i = 0; i < 100; i++) {
+                    particles.push(new Particle(x, y));
+                }
+            }
+
+            // 动画循环
+            function animate() {
+                // 半透明背景，实现拖影效果
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // 更新并绘制粒子
+                particles = particles.filter(particle => {
+                    particle.update();
+                    particle.draw();
+                    return particle.alpha > 0;
+                });
+
+                // 随机生成烟花
+                if (Math.random() < 0.05) {
+                    createFirework();
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+
+        // 初始化烟花
+        window.onload = initFireworks;
+
+        // 核心测算函数
         function calculateZodiac() {
             const yearInput = document.getElementById("yearInput");
             const errorTip = document.getElementById("errorTip");
             const resultArea = document.getElementById("resultArea");
             const zodiacText = document.getElementById("zodiacText");
+            const fortuneText = document.getElementById("fortuneText");
             const zodiacImg = document.getElementById("zodiacImg");
             
-            // Reset UI
+            // 重置UI
             errorTip.style.display = "none";
             resultArea.style.display = "none";
 
-            // Validate input
+            // 验证输入
             const year = parseInt(yearInput.value);
             if (isNaN(year) || year < 1900 || year > 2100) {
                 errorTip.style.display = "block";
                 return;
             }
 
-            // Calculate zodiac index (core logic)
+            // 计算生肖索引
             let index = (year - 4) % 12;
-            index = index < 0 ? index + 12 : index; // Handle negative numbers
+            index = index < 0 ? index + 12 : index;
             const currentZodiac = zodiacs[index];
 
-            // Show result with animation
+            // 显示结果（含运势）
             zodiacText.textContent = `Your Chinese Zodiac is: ${currentZodiac.name}`;
+            fortuneText.textContent = currentZodiac.fortune;
             zodiacImg.src = currentZodiac.img;
             resultArea.style.display = "block";
             
-            // Smooth scroll to result
+            // 平滑滚动到结果
             resultArea.scrollIntoView({ behavior: "smooth" });
         }
 
-        // Enter key trigger
+        // 回车触发测算
         document.getElementById("yearInput").addEventListener("keypress", function(e) {
             if (e.key === "Enter") {
                 calculateZodiac();
